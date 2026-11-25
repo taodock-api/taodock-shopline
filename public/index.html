@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Review AI-written product descriptions against approved specifications before updating your SHOPLINE store.">
+  <title>Taodock Catalog Review for SHOPLINE</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.mjs"></script>
+</head>
+<body>
+  <header class="topbar">
+    <span class="wordmark">Taodock</span>
+    <a href="https://github.com/taodock-api/taodock-shopline#readme">Setup guide ↗</a>
+  </header>
+  <main>
+    <div class="intro">
+      <div>
+        <h1>Catalog Review</h1>
+        <p>Review AI-written product descriptions before updating your SHOPLINE store.</p>
+      </div>
+      <span class="mode" id="mode" hidden></span>
+    </div>
+    <div class="workspace">
+      <section class="panel catalog" aria-labelledby="catalog-heading">
+        <div class="panel-heading">
+          <h2 id="catalog-heading">Products</h2>
+          <span id="selection-count">0 selected</span>
+        </div>
+        <form id="search">
+          <label for="search-title">Product title</label>
+          <div class="search-controls">
+            <input id="search-title" type="search" maxlength="255">
+            <button type="submit">Search</button>
+          </div>
+        </form>
+        <p id="catalog-state" role="status">Loading the catalogue…</p>
+        <div id="products"></div>
+        <button id="next-page" type="button" hidden>Next page</button>
+      </section>
+
+      <section class="draft-column" aria-labelledby="draft-heading">
+        <div class="panel tools">
+          <div class="panel-heading"><h2 id="draft-heading">Draft descriptions</h2></div>
+          <div class="model-controls">
+            <div>
+              <label for="model">Text model</label>
+              <select id="model" disabled><option value="">Loading models…</option></select>
+            </div>
+            <button type="button" class="primary" id="generate" disabled>Generate drafts</button>
+          </div>
+          <p class="subtle">Generation sends the selected titles and approved facts to the configured model.</p>
+          <p id="operation" role="status"></p>
+        </div>
+        <div id="cards"></div>
+        <p id="empty" class="panel empty">Select up to five products to start a batch.</p>
+      </section>
+    </div>
+  </main>
+  <template id="product-template">
+    <label class="product">
+      <input type="checkbox">
+      <span class="product-name"><strong></strong><small></small></span>
+    </label>
+  </template>
+  <template id="card-template">
+    <article class="panel card">
+      <div class="panel-heading">
+        <h3 data-field="title"></h3>
+        <button data-action="remove" type="button" class="quiet">Remove</button>
+      </div>
+      <div class="specs">
+        <label>Approved measurements
+          <textarea data-field="measurements" rows="3" maxlength="2500" placeholder="500 ml&#10;30 cm"></textarea>
+        </label>
+        <label>Required phrases
+          <textarea data-field="phrases" rows="3" maxlength="2500" placeholder="stainless steel&#10;navy blue"></textarea>
+        </label>
+      </div>
+      <p class="subtle">Enter one fact per line. Review these facts before generating.</p>
+      <p data-field="status" class="card-status" role="status"></p>
+      <div data-field="review" class="review" hidden>
+        <div class="review-columns">
+          <div>
+            <h4>Original description</h4>
+            <p data-field="current" class="current-text"></p>
+          </div>
+          <label>Draft description
+            <textarea data-field="draft" rows="6" maxlength="5000"></textarea>
+          </label>
+        </div>
+        <p data-field="outcome" class="check-summary"></p>
+        <ul data-field="findings"></ul>
+        <div class="review-tools">
+          <button data-action="check" type="button">Check edited draft</button>
+          <button data-action="new" type="button">New draft</button>
+        </div>
+        <div class="write-controls">
+          <label class="approval"><input type="checkbox" data-field="confirm">
+            <span>Replace the current description with this draft. Previous formatting and embedded media will be removed.</span>
+          </label>
+          <button data-action="apply" type="button" class="primary">Apply description</button>
+        </div>
+        <div class="feedback">
+          <label>Flag reason
+            <select data-field="reason">
+              <option value="inaccurate">Inaccurate facts</option>
+              <option value="inappropriate">Inappropriate content</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <button data-action="flag" type="button">Flag draft</button>
+        </div>
+      </div>
+    </article>
+  </template>
+</body>
+</html>
